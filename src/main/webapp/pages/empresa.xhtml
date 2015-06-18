@@ -1,0 +1,156 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="metadata">
+	</ui:define>
+	<ui:define name="content">
+		
+		<h:form id="form-empresa-dados">
+			
+			<p:messages id="messages-geral"  closable="true"/>
+			
+			<p:toolbar id="toolbar-main" style="margin-top:5px;margin-bottom:10px;">
+				<f:facet name="left">
+					<p:commandButton value="Incluir" icon="ui-icon-document" title="Incluir" />
+					<p:commandButton value="Editar" icon="ui-icon-pencil" title="Editar" />
+					<p:commandButton value="Excluir" icon="ui-icon-trash" title="Excluir" />
+					
+					<span class="ui-separator">
+						<span class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+					
+					<p:commandButton value="Cancelar" icon="ui-icon-cancel" title="Cancelar" />
+					<p:commandButton value="Salvar" icon="ui-icon-check" title="Salvar" />
+					
+					<span class="ui-separator">
+						<span class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+					
+				</f:facet>
+				
+				<f:facet name="right">
+					<p:commandButton value="Pesquisar" icon="ui-icon-search" title="Pesquisar" />
+				</f:facet>				
+				
+			</p:toolbar>
+		
+			<p:fieldset toggleable="true" id="fieldset-dados-empresa">
+
+				<f:facet name="legend">
+					<h:outputText class="legend-fieldset" value="Dados da Empresa"/>
+				</f:facet>	
+						
+				<h:panelGrid columns="2" id="panel-dados-empresa">
+					<p:outputLabel styleClass="form-label" value="Razão Social" for="razao-social"/>
+					<p:inputText id="razao-social" size="60" maxlength="100" value="#{empresaBean.empresa.razao}" />
+					
+					<p:outputLabel value="Fantasia" for="fantasia"/>
+					<p:inputText id="fantasia" size="60" maxlength="100" value="#{empresaBean.empresa.fantasia}" />					
+					
+					<p:outputLabel value="CNPJ" for="cnpj"/>
+					<p:inputMask mask="99.999.999/9999-99" id="cnpj" size="18" maxlength="18" value="#{empresaBean.empresa.cnpj}" />
+					
+					<p:outputLabel value="Contato" for="contato"/>
+					<p:inputText id="contato" size="60" maxlength="100" value="#{empresaBean.empresa.contato}" />		
+				</h:panelGrid>	
+
+			</p:fieldset>
+		</h:form>
+		
+		<!--  
+		<h:form id="form-empresa-endereco">
+			<p:fieldset toggleable="true" id="fieldset-dados-empresa">
+				<f:facet name="legend">
+					<h:outputText class="legend-fieldset" value="Outras Informações"/>
+				</f:facet>	
+						
+				<p:tabView>
+					<p:tab title="Endereço">
+						<p:dataTable value="#{empresaBean.empresa.getEnderecos()}" var="endereco"  emptyMessage="Nenhum Endereço Cadastrado!!!" 
+							id="dtlistaEndereco" rows="5" paginator="true" paginatorPosition="bottom" style="margin-top:5px;margin-left:0px;"
+							selection="#{empresaBean.empresaSelecionada}" selectionMode="single" rowKey="#{endereco.id}" >
+							
+							<p:column headerText="Id" rendered="false" sortBy="#{endereco.id}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Id" style="float:left;"/>
+								</f:facet>					
+								<h:outputText styleClass="datatable-row" value="#{endereco.id}"/>
+							</p:column>
+							
+							<p:column width="10%" sortBy="#{endereco.endereco}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Tipo" style="float:left;"/>
+								</f:facet>			
+								<h:outputText styleClass="datatable-row" value="#{endereco.getTipoEndereco().getDescricao()}" style="float:left;"/>
+							</p:column>							
+					
+							<p:column sortBy="#{endereco.endereco}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Endereço" style="float:left;"/>
+								</f:facet>			
+								<h:outputText styleClass="datatable-row" value="#{endereco.endereco}" style="float:left;"/>
+							</p:column>
+							
+							<p:column width="8%"  sortBy="#{endereco.numero}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="N." style="float:left;"/>
+								</f:facet>
+								<h:outputText styleClass="datatable-row" value="#{endereco.numero}" style="float:left;"/>
+							</p:column>
+							
+							<p:column width="10%"  sortBy="#{endereco.cep}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="CEP" style="float:left;"/>
+								</f:facet>				
+								<h:outputText styleClass="datatable-row" value="#{endereco.cep}"/>
+							</p:column>
+							
+							<p:column width="15%"  sortBy="#{endereco.complemento}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Complemento" style="float:left;"/>
+								</f:facet>				
+								<h:outputText styleClass="datatable-row" value="#{endereco.complemento}"/>
+							</p:column>	
+							
+							<p:column width="15%"  sortBy="#{endereco.bairro}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Bairro" style="float:left;"/>
+								</f:facet>				
+								<h:outputText styleClass="datatable-row" value="#{endereco.bairro}"/>
+							</p:column>	
+
+							<p:column width="15%"  sortBy="#{endereco.cidade}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="Cidade" style="float:left;"/>
+								</f:facet>				
+								<h:outputText styleClass="datatable-row" value="#{endereco.cidade}"/>
+							</p:column>																				
+
+							<p:column width="7%"  sortBy="#{endereco.uf}">
+								<f:facet name="header"> 
+									<h:outputText styleClass="datatable-header" value="UF" style="float:left;"/>
+								</f:facet>				
+								<h:outputText styleClass="datatable-row" value="#{endereco.uf}"/>
+							</p:column>
+												
+						</p:dataTable>						
+					</p:tab>
+					
+					<p:tab title="Telefones">
+					
+					</p:tab>
+					
+					<p:tab title="Endereço Eletronico">
+					
+					</p:tab>				
+					
+				</p:tabView>
+			</p:fieldset>
+		</h:form>
+		-->
+		
+	</ui:define>
+</ui:composition>

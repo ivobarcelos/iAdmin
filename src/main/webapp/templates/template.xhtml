@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:f="http://java.sun.com/jsf/core">
+	<!--  
+	<f:metadata>
+		<ui:insert name="metadata" />
+	</f:metadata>
+	-->
+	<h:head>
+        <title><ui:insert name="title">ISoft Lab - IAdmin</ui:insert></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="componentes.css" />
+        <ui:insert name="script"></ui:insert>
+	</h:head>
+	<h:body>
+			<p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
+				
+				<!--  Top -->
+			    <p:layoutUnit position="north" size="100" header="Top" resizable="false" closable="false" collapsible="true">
+			    	<ui:include src="header.xhtml" />
+			    </p:layoutUnit>				
+		
+				<!-- Left -->			
+			    <p:layoutUnit position="west" size="200" header="Menu" resizable="false" closable="false" collapsible="true">
+			        <ui:include src="menu.xhtml" />
+			    </p:layoutUnit>		
+						
+				<!-- Center -->
+			    <p:layoutUnit position="center" header="Conteudo">
+			        	<ui:insert name="content" />
+			    </p:layoutUnit>				
+				
+				<!--  Right -->
+			    <p:layoutUnit position="east" size="200" header="Right" resizable="false" closable="false" collapsible="true" effect="drop">
+			    	<h:form>
+				        <p:outputLabel for="tema" value="Tema:" /> 
+				        <p:themeSwitcher id="tema" style="width:98%" effect="fade" var="t">
+				            <f:selectItem itemLabel="Escolha o Tema" itemValue="" />
+				            <f:selectItems value="#{themeSwitcherView.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme.name}" />
+				 
+				            <p:column>
+				                <h:outputText styleClass="ui-theme ui-theme-" style="display-block" />
+				            </p:column>
+				 
+				            <p:column>
+				                 
+				            </p:column>
+				        </p:themeSwitcher>
+					</h:form>			        
+			    </p:layoutUnit>
+				
+				<!-- Bottom -->
+			    <p:layoutUnit position="south" size="100" header="Bottom" resizable="false" closable="false" collapsible="true">
+			        <ui:include src="footer.xhtml" />
+			    </p:layoutUnit>	
+			    
+			    <h:form id="form-confirm-dialog">
+			    	<p:confirmDialog global="true" id="confirm-dialog-yesno-global">
+			    		<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			    		<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			    	</p:confirmDialog>
+			    </h:form>
+			    
+			</p:layout>
+	</h:body>
+</html>		

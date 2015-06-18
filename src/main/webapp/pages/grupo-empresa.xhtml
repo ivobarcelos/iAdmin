@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	
+	<!--<ui:define name="metadata"></ui:define>-->
+	
+	<ui:define name="script">
+	</ui:define>
+	
+	<ui:define name="title">Cadastro de Grupo de Empresas</ui:define>
+	
+	<ui:define name="content" id="content">
+				
+		<f:metadata>
+			<f:viewAction action="#{grupoEmpresasBean.consultar}"/>
+		</f:metadata>
+	
+		<h:form id="form-lista">
+			
+			<p:messages id="messages-geral"  closable="true"/>
+			
+			<p:toolbar id="toolbar">
+			
+				<f:facet name="left">
+					<p:commandButton value="Incluir" icon="ui-icon-document" title="Incluir" 
+						action="#{grupoEmpresasBean.prepararInclusaoEdicao}"
+						process="@this" update="grupoEmpresa-dialogo"
+						oncomplete ="PF('cadastroGrupoEmpresa').show()">
+					
+						<p:resetInput target="grupoEmpresa-dialogo"></p:resetInput>
+					</p:commandButton>
+					
+		            <span class="ui-separator">
+		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		            </span>
+		            				
+		            <p:commandButton value="Editar" icon="ui-icon-pencil" title="Editar" 
+		            	process="@this" update="grupoEmpresa-dialogo"
+		            	oncomplete ="PF('cadastroGrupoEmpresa').show()"
+		            	disabled="#{grupoEmpresasBean.grupoEmpresaSelecionada == null}">
+		            	
+		            	<p:resetInput target="grupoEmpresa-dialogo"></p:resetInput>
+		            	
+		            	<f:setPropertyActionListener 
+		            		value="#{grupoEmpresasBean.grupoEmpresaSelecionada}" 
+		            		target="#{grupoEmpresasBean.grupoEmpresasInclusaoEdicao}">
+		            	</f:setPropertyActionListener>
+		            	
+		            </p:commandButton>
+		            
+		            <p:commandButton value="Excluir" icon="ui-icon-trash" title="Excluir"
+		            	action="#{grupoEmpresasBean.excluirGrupoEmpresas}"
+		            	process="@this" update="listaGrupo messages-geral toolbar"
+		            	disabled="#{grupoEmpresasBean.grupoEmpresaSelecionada == null}">
+		            	
+		            	<p:confirm icon="ui-icon-alert" header="Exclusáo de Grupo de Empresas" message="Deseja excluir este Grupo realmente?" />
+		            </p:commandButton>				
+		            				
+				</f:facet>
+			
+			</p:toolbar>
+			
+			<p:dataTable value="#{grupoEmpresasBean.todosGruposEmpresas}" var="grupo"  emptyMessage="Nehum Grupo Cadastrado!!!" 
+				id="listaGrupo" rows="10" paginator="true" paginatorPosition="bottom" style="margin-top:5px;"
+				selection="#{grupoEmpresasBean.grupoEmpresaSelecionada}" selectionMode="single" rowKey="#{grupo.id}" >
+				
+				<p:ajax event="rowSelect" update=":form-lista:toolbar :form-lista:listaEmpresas" />
+				<p:ajax event="rowUnselect" update=":form-lista:toolbar :form-lista:listaEmpresas"/>
+				<p:ajax event="page" update=":form-lista:toolbar" listener="#{grupoEmpresasBean.desabilitaToolbar}" />
+				
+				<f:facet name="header">Grupos</f:facet>
+			
+				<p:column headerText="Id" rendered="false" sortBy="#{grupo.id}">
+					<f:facet name="header"> 
+						<h:outputText styleClass="datatable-header" value="Id" style="float:left;"/>
+					</f:facet>					
+					<h:outputText styleClass="datatable-row" value="#{grupo.id}"/>
+				</p:column>
+		
+				<p:column sortBy="#{grupo.nomeGrupoEmpresa}">
+					<f:facet name="header"> 
+						<h:outputText styleClass="datatable-header" value="Grupo" style="float:left;"/>
+					</f:facet>			
+					<h:outputText styleClass="datatable-row" value="#{grupo.nomeGrupoEmpresa}" style="float:left;"/>
+				</p:column>
+				
+				<p:column width="20%"  sortBy="#{grupo.cnpj}">
+					<f:facet name="header"> 
+						<h:outputText styleClass="datatable-header" value="CNPJ" style="float:left;"/>
+					</f:facet>
+					<h:outputText styleClass="datatable-row" value="#{grupo.cnpj}" style="float:left;"/>
+				</p:column>
+				
+				<p:column width="20%"  sortBy="#{grupo.nomeProprietario}">
+					<f:facet name="header"> 
+						<h:outputText styleClass="datatable-header" value="Proprietário" style="float:left;"/>
+					</f:facet>				
+					<h:outputText styleClass="datatable-row" value="#{grupo.nomeProprietario}"/>
+				</p:column>		
+		
+			</p:dataTable>
+			
+			<p:dataTable value="#{grupoEmpresasBean.empresasDoGrupo}" var="empresa" emptyMessage="Nenhuma empresa Relacionada a este grupo"
+				id="listaEmpresas" paginator="true" paginatorPosition="bottom" selectionMode="single" style="margin-top:10px;" rowKey="#{empresa.id}">
+				
+				<f:facet name="header">#{grupoEmpresasBean.grupoEmpresaSelecionada.nomeGrupoEmpresa}</f:facet>
+				
+				<p:column sortBy="#{empresa.fantasia}">
+					<f:facet name="header">
+						<h:outputText styleClass="datatable-header" value="Empresa" style="float:left;" />
+					</f:facet>
+					<h:outputText styleClass="datatable-row" value="#{empresa.fantasia}" style="float:left;" />
+				</p:column>
+				
+				<p:column sortBy="#{empresa.cnpj}">
+					<f:facet name="header">
+						<h:outputText styleClass="datatable-header" value="CNPJ" style="float:left;" />
+					</f:facet>
+					<h:outputText styleClass="datatable-row" value="#{empresa.cnpj}" style="float:left;" />
+				</p:column>
+				
+				<p:column sortBy="#{empresa.contato}">
+					<f:facet name="header">
+						<h:outputText styleClass="datatable-header" value="Contato" style="float:left;" />
+					</f:facet>
+					<h:outputText styleClass="datatable-row" value="#{empresa.contato}" style="float:left;" />
+				</p:column>								
+				
+			</p:dataTable>			
+			
+		</h:form>
+			
+		<p:dialog header="Incluir Grupo" widgetVar="cadastroGrupoEmpresa" id="grupoEmpresa-dialogo"
+			appendTo="@(body)" resizable="false" modal="true" closeOnEscape="true" >
+			
+			<h:form id="form-dialog">
+				<p:messages id="grupoEmpresa-dialogo-messages" />
+				
+				<p:defaultCommand target="cmdSalvarCadastroGrupoEmpresa" scope="grupoEmpresa-dialogo"/>
+				
+				<h:panelGrid columns="2" id="painel-grupoEmpresa">
+					
+					<p:outputLabel value="Nome do Grupo" for="nome-grupo"/>
+					<p:inputText id="nome-grupo" size="60" maxlength="100" value="#{grupoEmpresasBean.grupoEmpresasInclusaoEdicao.nomeGrupoEmpresa}" />
+					
+					<p:outputLabel value="CNPJ" for="cnpj"/>
+					<p:inputMask mask="99.999.999/9999-99" id="cnpj" size="18" maxlength="18" value="#{grupoEmpresasBean.grupoEmpresasInclusaoEdicao.cnpj}" />
+					
+					<p:outputLabel value="Proprietário" for="proprietario"/>
+					<p:inputText id="proprietario" size="60" maxlength="100" value="#{grupoEmpresasBean.grupoEmpresasInclusaoEdicao.nomeProprietario}" />		
+					
+					<h:outputLabel/>
+					<p:commandButton value="Salvar" id="cmdSalvarCadastroGrupoEmpresa" 
+						action="#{grupoEmpresasBean.salvarGrupoEmpresas}" process="grupoEmpresa-dialogo" 
+						oncomplete="if (!args.validationFailed) PF('cadastroGrupoEmpresa').hide()"
+						update="grupoEmpresa-dialogo-messages painel-grupoEmpresa form-lista:listaGrupo form-lista:toolbar" />						
+					
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	
+	</ui:define>
+	
+</ui:composition>
