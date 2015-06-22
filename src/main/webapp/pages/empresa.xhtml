@@ -14,6 +14,7 @@
 			
 			<p:toolbar id="toolbar-main" style="margin-top:5px;margin-bottom:10px;">
 				<f:facet name="left">
+				
 					<p:commandButton value="Incluir" icon="ui-icon-document" title="Incluir" />
 					<p:commandButton value="Editar" icon="ui-icon-pencil" title="Editar" />
 					<p:commandButton value="Excluir" icon="ui-icon-trash" title="Excluir" />
@@ -32,7 +33,12 @@
 				</f:facet>
 				
 				<f:facet name="right">
-					<p:commandButton value="Pesquisar" icon="ui-icon-search" title="Pesquisar" />
+					<p:commandButton value="Pesquisar" icon="ui-icon-search" title="Pesquisar"
+						process="@this" update="dialogo-pesquisa-empresa"
+						oncomplete="PF('wv-dialogo-pesquisa-empresa').show()" >
+					
+						<p:resetInput target="dialogo-pesquisa-empresa"></p:resetInput>
+					</p:commandButton>
 				</f:facet>				
 				
 			</p:toolbar>
@@ -151,6 +157,52 @@
 			</p:fieldset>
 		</h:form>
 		-->
+		
+		
+		
+		<!-- Dialogo de Pesquisa -->
+		<p:dialog header="Pesquisar Empresas" widgetVar="wv-dialogo-pesquisa-empresa" id="dialogo-pesquisa-empresa"
+			appendTo="@(body)" resizable="false" modal="true" closeOnEscape="true" >
+		
+			<h:form id="form-dados-pesquisa-empresa">
+				<p:fieldset toggleable="true" id="fieldset-pesquisa-empresa" >
+					<f:facet name="legend">
+						<h:outputText class="legend-fieldset" value="Pesquisar Empresas"/>
+					</f:facet>
+				
+					<p:messages id="msg-pesquisa-empresa" />
+					<p:defaultCommand target="cmd-pesquisar" scope="dialogo-pesquisa-empresa"/>
+					
+					<h:panelGrid columns="3" id="painel-pesquisa-empresa">
+
+						<h:outputLabel value="Fantasia" for="radio-pesquisa-empresa-fantasia"/>
+						<p:inputText id="pesquisa-fantasia" size="100" maxlength="50"/>
+						
+						<p:commandButton value="Pesquisar" id="cmd-pesquisar" icon="ui-icon-search"
+						action="#{empresaBean.pesquisarEmpresas}"
+						process="dialogo-pesquisa-empresa"
+						update="dialogo-pesquisa-empresa form-dados-pesquisa-empresa msg-pesquisa-empresa painel-pesquisa-empresa" />															
+						
+					</h:panelGrid>
+					
+					
+				</p:fieldset>
+			</h:form>
+			
+			<h:form id="form-lista-pesquisa-empresa">
+				<p:fieldset toggleable="false" id="fieldset-lista-pesquisa-empresa">
+					<f:facet name="legend">
+						<h:outputText class="legend-fieldset" value="Lista de Empresas" />
+					</f:facet>
+					
+					
+				</p:fieldset>
+			</h:form>
+			
+		</p:dialog>
+		
+		<!-- Dim dialogo de Pesquisa -->
+		
 		
 	</ui:define>
 </ui:composition>
